@@ -47,3 +47,24 @@ select * from inventory where film_id = (select film_id from film where title = 
 
 select first_name, last_name from customer inner join rental on customer.customer_id = rental.customer_id inner join inventory on inventory.inventory_id = rental.inventory_id inner join film on inventory.film_id = film.film_id  where film.title = "CHICAGO NORTH";
 
+describe customer;
+show tables;
+describe address;
+describe city;
+select first_name, last_name, city from customer inner join address on customer.address_id = address.address_id inner join city on address.city_id = city.city_id order by city;
+
+
+describe film;
+describe rental;
+describe inventory;
+
+select count(*) as nVecesArrendada, title from film inner join inventory on film.film_id = inventory.film_id inner join rental on inventory.inventory_id = rental.inventory_id group by film.film_id order by nVecesArrendada DESC;
+
+
+
+
+show tables;
+describe payment;
+select sum(amount) as volumenGanado, title from payment inner join rental on payment.rental_id = rental.rental_id inner join inventory on rental.inventory_id = inventory.inventory_id inner join film on inventory.film_id = film.film_id group by film.film_id order by volumenGanado DESC;
+
+
