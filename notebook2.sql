@@ -68,3 +68,6 @@ describe payment;
 select sum(amount) as volumenGanado, title from payment inner join rental on payment.rental_id = rental.rental_id inner join inventory on rental.inventory_id = inventory.inventory_id inner join film on inventory.film_id = film.film_id group by film.film_id order by volumenGanado DESC;
 
 
+describe customer;
+select sum(amount) as Pagado, first_name, last_name from (payment inner join customer on customer.customer_id = payment.customer_id) where amount > 10 group by customer.customer_id order by Pagado DESC;
+
