@@ -1,73 +1,44 @@
 use sakila;
 
-SELECT title from film;
+/* 4.1 */
+select count(customer_id) from customer;
 
-select distinct release_year from film;
+/* 4.2 */
+select customer_id, count(*) as nArriendos from rental group by customer_id order by nArriendos DESC;
 
-select title, rental_duration from film where rental_duration >= 4 order by rental_duration;
+/* 4.3 */
+SELECT MAX(total) FROM (SELECT customer_id,count(*) as total FROM rental GROUP BY customer_id) as t1;
+/* Esta consulta entrega la maxima cantidad de arriendos hechos por un solo cliente */
 
-select customer_id, rental_id, amount, payment_date from payment where payment_date between "2005-07-01" and "2005-08-01" order by payment_date;
+/* 4.4 */
+/* Una sub-consulta es la forma de encadenar querys en una sola instruccion SQL */
 
-select distinct count(customer_id) from customer;
-
-describe rental;
-
-select customer_id, count(*) as nArriendos from rental group by customer_id;
-
-SELECT MAX(total) as Maximo FROM (SELECT customer_id,count(*) as total FROM rental GROUP BY customer_id) as t1;
-
-describe payment;
+/* 4.5 */
 select staff_id, count(*) as nTransacciones from payment group by staff_id;
 
+/* 4.6 */
 select staff_id, count(*) as nTransacciones from payment where payment_date between "2005-08-23" and "2005-08-24" group by staff_id order by nTransacciones DESC limit 1;
 
 
-describe film;
-describe language;
-
-select title, name from film inner join language on film.language_id = language.language_id;
-
-show tables;
-describe film;
-describe customer;
-describe rental;
-describe inventory;
-
-select * from rental limit 10;
-select * from inventory;
+/* 5.1 */
+select film.title as Titulo_Pelicula, language.name as Nombre_Idioma from film inner join language on film.language_id = language.language_id;
 
 
-select * from inventory where film_id = (select film_id from film where title = "CHICAGO NORTH");
-
-##izquierda
-select * from customer inner join rental on customer.customer_id = rental.customer_id;
-
-##derecha
-select * from inventory where film_id = (select film_id from film where title = "CHICAGO NORTH");
-
+/* 5.2 */
 select first_name, last_name from customer inner join rental on customer.customer_id = rental.customer_id inner join inventory on inventory.inventory_id = rental.inventory_id inner join film on inventory.film_id = film.film_id  where film.title = "CHICAGO NORTH";
 
-describe customer;
-show tables;
-describe address;
-describe city;
+/* 5.3 */
 select first_name, last_name, city from customer inner join address on customer.address_id = address.address_id inner join city on address.city_id = city.city_id order by city;
 
 
-describe film;
-describe rental;
-describe inventory;
-
-select count(*) as nVecesArrendada, title from film inner join inventory on film.film_id = inventory.film_id inner join rental on inventory.inventory_id = rental.inventory_id group by film.film_id order by nVecesArrendada DESC;
+/* 5.4 */
+select count(*) as nVecesArrendada, title as Titulo_Pelicula from film inner join inventory on film.film_id = inventory.film_id inner join rental on inventory.inventory_id = rental.inventory_id group by film.film_id order by nVecesArrendada DESC;
 
 
-
-
-show tables;
-describe payment;
+/* 5.5 */
 select sum(amount) as volumenGanado, title from payment inner join rental on payment.rental_id = rental.rental_id inner join inventory on rental.inventory_id = inventory.inventory_id inner join film on inventory.film_id = film.film_id group by film.film_id order by volumenGanado DESC;
 
-
-describe customer;
+/* 5.6 */
 select sum(amount) as Pagado, first_name, last_name from (payment inner join customer on customer.customer_id = payment.customer_id) where amount > 10 group by customer.customer_id order by Pagado DESC;
 
+/* Pablo Saez Parra */
